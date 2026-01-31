@@ -1,0 +1,77 @@
+services:
+  # ---------------------------------------------------------------------------
+  # Frontend: Next.js UI
+  # ---------------------------------------------------------------------------
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: docintel-frontend
+    ports:
+      - "3001:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on:
+      - orchestrator
+
+  # ---------------------------------------------------------------------------
+  # Orchestrator: Workflow Engine (Gateway)
+  # ---------------------------------------------------------------------------
+  orchestrator:
+    build:
+      context: ./orchestrator
+      dockerfile: Dockerfile
+    container_name: docintel-orchestrator
+    ports:
+      - "8000:8000"
+    environment:
+      - ENV=dev
+      - LOG_LEVEL=INFO
+      - PREPROCESSING_HOST=preprocessing
+      - PREPROCESSING_PORT=8001
+      - VISUAL_HOST=visual-service
+      - VISUAL_PORT=8002
+    volumes:
+      - ./common:/app/common # Mount common lib
+      - ./orchestrator:/app  # Optional: for hot-reload if using command override
+    depends_on:
+      - preprocessing
+      - visual-service
+
+  # ---------------------------------------------------------------------------
+  # Preprocessing Service: CPU Tasks (PDF->Image)
+  # ---------------------------------------------------------------------------
+  preprocessing:
+    build:
+      context: ./preprocessing_service
+      dockerfile: Dockerfile
+    container_name: docintel-preprocessing
+    ports:
+      - "8001:8001"
+    environment:
+      - ENV=dev
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./common:/app/common
+
+  # ---------------------------------------------------------------------------
+  # Visual Service: VLM Interface (GPU/Cloud)
+  # ---------------------------------------------------------------------------
+  visual-service:
+    build:
+      context: ./visual_service
+      dockerfile: Dockerfile
+    container_name: docintel-visual
+    ports:
+      - "8002:8002"
+    environment:
+      - ENV=dev
+      - LOG_LEVEL=INFO
+      - FIREWORKS_API_KEY=${FIREWORKS_API_KEY} # Passed from host .env
+    volumes:
+      - ./common:/app/common
+
+networks:
+  default:
+    name: docintel-net
+    driver: bridge
