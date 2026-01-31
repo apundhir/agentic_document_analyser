@@ -20,8 +20,8 @@ The system follows a **Cloud-Native Microservices Architecture**, orchestrated b
 
 ```mermaid
 flowchart TB
-    User((User)) -->|Uploads Doc| UI[Frontend (Next.js)]
-    UI -->|POST /analyze| Orch{Orchestrator Service}
+    User((User)) -->|Uploads Doc| UI["Frontend (Next.js)"]
+    UI -->|POST /analyze| Orch{"Orchestrator Service"}
     
     subgraph Core_Services [Backend Services]
         direction TB
@@ -29,7 +29,7 @@ flowchart TB
         Orch -->|2. Parallel Analysis| Visual[Visual Intelligence Service]
         
         subgraph Visual_Logic [Visual Logic]
-            Visual -->|Extract| VLM[Fireworks AI (Qwen2-VL)]
+            Visual -->|Extract| VLM["Fireworks AI (Qwen2-VL)"]
             VLM -->|JSON| Parser[Layout Parser]
         end
     end

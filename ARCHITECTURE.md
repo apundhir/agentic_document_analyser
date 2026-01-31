@@ -6,15 +6,15 @@ DocIntel Pro is built on a **Cloud-Native Microservices Architecture** designed 
 
 ```mermaid
 graph TD
-    User([User]) -->|Upload PDF/Image| FE[Frontend App (Next.js)]
-    FE -->|POST /analyze| ORCH[Orchestrator Service (FastAPI)]
+    User([User]) -->|Upload PDF/Image| FE["Frontend App (Next.js)"]
+    FE -->|POST /analyze| ORCH["Orchestrator Service (FastAPI)"]
     
     subgraph Processing_Pipeline [Processing Pipeline]
         ORCH -->|1. Convert to Image| PRE[Preprocessing Service]
         PRE -->|Normalized Images| ORCH
         
         ORCH -->|2. Analyze Layout| VIS[Visual Intelligence Service]
-        VIS -->|Extract Layout/Text| VLM[External VLM (Fireworks AI)]
+        VIS -->|Extract Layout/Text| VLM["External VLM (Fireworks AI)"]
         VLM -->|JSON Response| VIS
         VIS -->|Structured Blocks| ORCH
     end
