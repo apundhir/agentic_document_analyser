@@ -2,9 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.1.0] - 2024-01-31
+## [0.1.1] - 2024-01-31
 
 ### 🚀 Features
+- **Docker Package Support**: Added Dockerfiles and GitHub Actions workflow to auto-publish packages to GHCR.
 - **Visual Intelligence**: Integrated Qwen2-VL (via Fireworks AI) for unified layout analysis and OCR.
 - **Frontend**:
     - Next.js 14 UI with Tailwind CSS and Shadcn/UI integration.
