@@ -29,3 +29,7 @@ logs/
 tmp/
 *.tmp
 *.bak
+
+# Personal AI assistant instructions (never commit)
+CLAUDE.md
+.claude/
